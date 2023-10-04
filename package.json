@@ -2,7 +2,7 @@
   "name": "html-to-js",
   "displayName": "HTML to Javascript (createElement)",
   "description": "Converts the selected HTML to a javascript snippet that can be run to generate the HTML",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "repository": {
     "url": "https://github.com/moojor224/html-to-js/"
   },
