@@ -112,7 +112,9 @@ jobs:
           npm i --save-dev @vscode/vsce
           vsce package --pre-release --no-git-tag-version --no-update-package-json -o "./marquee-$RELEASE_VERSION.vsix" ${{ github.event.inputs.additionalFlags }}
       - name: Package Extension (Stable)
-        run: vsce package $RELEASE_VERSION --no-git-tag-version --no-update-package-json -o "./marquee-$RELEASE_VERSION.vsix" ${{ github.event.inputs.additionalFlags }}
+        run: |
+          npm i --save-dev @vscode/vsce
+          vsce package $RELEASE_VERSION --no-git-tag-version --no-update-package-json -o "./marquee-$RELEASE_VERSION.vsix" ${{ github.event.inputs.additionalFlags }}
         if: ${{ github.event.inputs.releaseChannel == 'stable' }}
       - name: Push Tags
         run: |
