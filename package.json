@@ -1,0 +1,72 @@
+{
+  "name": "html-to-js",
+  "displayName": "HTML to Javascript (createElement)",
+  "description": "Converts the selected HTML to a javascript snippet that can be run to generate the HTML",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.82.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "html-to-js.convert",
+        "title": "Convert HTML to JS"
+      },
+      {
+        "command": "html-to-js.insertFunction",
+        "title": "Insert CreateElement function definition"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "javascript",
+        "path": "./src/snippets.json"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "resourceLangId == html",
+          "command": "html-to-js.convert",
+          "alt": "html-to-js.convert",
+          "group": "HtmlJs@1"
+        },
+        {
+          "when": "resourceLangId == html || resourceLangId == javascript",
+          "command": "html-to-js.insertFunction",
+          "alt": "html-to-js.insertFunction",
+          "group": "HtmlJs@1"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.2",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.82.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.3",
+    "@typescript-eslint/parser": "^6.7.3",
+    "@vscode/test-electron": "^2.3.4",
+    "esbuild": "^0.19.4",
+    "eslint": "^8.50.0",
+    "glob": "^10.3.3",
+    "mocha": "^10.2.0",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "jsdom": "^22.1.0"
+  }
+}
