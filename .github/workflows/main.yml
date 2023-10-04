@@ -29,8 +29,8 @@ jobs:
           
       - name: Setup Git
         run: |
-          git config --global user.name "stateful-wombot"
-          git config --global user.email "christian+github-bot@stateful.com"
+          git config --global user.name "moojor224"
+          git config --global user.email "moojor224@gmail.com"
           
       - name: Get Current Version Number
         run: |
@@ -52,9 +52,9 @@ jobs:
           
       
       - name: Package Extension (Stable)
-        run: npm i --save-dev @vscode/vsce
-        
-      - run: npx vsce package $RELEASE_VERSION --no-git-tag-version --no-update-package-json -o "./marquee-$RELEASE_VERSION.vsix" ${{ github.event.inputs.additionalFlags }}
+        run: |
+          npm i --save-dev @vscode/vsce
+          npx vsce package -o "./marquee-$RELEASE_VERSION.vsix"
         
         
       - name: Push Tags
@@ -62,7 +62,7 @@ jobs:
       #     git log -1 --stat
       #     git push origin main --tags
         run: |
-          export GIT_TAG=$(git describe --tags --abbrev=0)
+          export GIT_TAG=releases
           echo "GIT_TAG=$GIT_TAG" >> $GITHUB_ENV
           
       - name: GitHub Release
