@@ -23,16 +23,16 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 	let insertFunction = vscode.commands.registerTextEditorCommand('html-to-js.insertFunction', (editor, edit) => {
 		editor.selections.forEach((selection, i) => {
-			let text = "function createElement(tag = \"span\", data = {}) {" +
-				"\ttag = typeof(tag) === \"string\" ? document.createElement(tag) : tag;" +
-				"\tObject.keys(data).forEach(e => {" +
-				"\t\tif (typeof data[e] === \"object\") {" +
-				"\t\t\tcreateElement(tag[e] || (tag[e] = {}), data[e]);" +
-				"\t\t} else {" +
-				"\t\t\ttag[e] = data[e];" +
-				"\t\t}" +
-				"\t});" +
-				"\treturn tag;" +
+			let text = "function createElement(tag = \"span\", data = {}) {\n" +
+				"\ttag = typeof(tag) === \"string\" ? document.createElement(tag) : tag;\n" +
+				"\tObject.keys(data).forEach(e => {\n" +
+				"\t\tif (typeof data[e] === \"object\") {\n" +
+				"\t\t\tcreateElement(tag[e] || (tag[e] = {}), data[e]);\n" +
+				"\t\t} else {\n" +
+				"\t\t\ttag[e] = data[e];\n" +
+				"\t\t}\n" +
+				"\t});\n" +
+				"\treturn tag;\n" +
 				"}";
 			edit.insert(selection.active, text);  // insert at current cursor
 		});
