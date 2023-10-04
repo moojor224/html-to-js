@@ -2,7 +2,7 @@
   "name": "html-to-js",
   "displayName": "HTML to Javascript (createElement)",
   "description": "Converts the selected HTML to a javascript snippet that can be run to generate the HTML",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^1.82.0"
   },

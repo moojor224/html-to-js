@@ -18,10 +18,22 @@ type HTMLElement = {
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log('"html-to-js" active');
+	function createElement() {
 
+	}
 	let insertFunction = vscode.commands.registerTextEditorCommand('html-to-js.insertFunction', (editor, edit) => {
 		editor.selections.forEach((selection, i) => {
-			let text = "FooBar " + i;
+			let text = "function createElement(tag = \"span\", data = {}) {" +
+				"\ttag = typeof(tag) === \"string\" ? document.createElement(tag) : tag;" +
+				"\tObject.keys(data).forEach(e => {" +
+				"\t\tif (typeof data[e] === \"object\") {" +
+				"\t\t\tcreateElement(tag[e] || (tag[e] = {}), data[e]);" +
+				"\t\t} else {" +
+				"\t\t\ttag[e] = data[e];" +
+				"\t\t}" +
+				"\t});" +
+				"\treturn tag;" +
+				"}";
 			edit.insert(selection.active, text);  // insert at current cursor
 		});
 	});
@@ -37,7 +49,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		const dom = new JSDOM(`<!DOCTYPE html><body>${selText}</body>`);
 
-		function setAttribute(data: any, name: string, value: string){
+		function setAttribute(data: any, name: string, value: string) {
 			let keys = {
 				class: "classList",
 			};
@@ -81,7 +93,7 @@ export function activate(context: vscode.ExtensionContext) {
 			var arr = [`\tcreateElement("div")`];
 			recurse(element, arr, 1).join("\n");
 			arr[arr.length - 1] = ((w) => {
-				if(w[w.length - 1] === ","){
+				if (w[w.length - 1] === ",") {
 					w.pop();
 				}
 				return w.join("");
