@@ -2,7 +2,11 @@ name: Publish
 
 on:
   workflow_dispatch:
-
+    inputs:
+      tag:
+        description: 'Test scenario tags'
+        required: false
+        type: string
 jobs:
   release:
     runs-on: ubuntu-latest
