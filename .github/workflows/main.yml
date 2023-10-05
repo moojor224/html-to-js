@@ -2,11 +2,7 @@ name: Publish
 
 on:
   workflow_dispatch:
-    # inputs:
-    #   tag:
-    #     description: 'Test scenario tags'
-    #     required: false
-    #     type: string
+  
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -20,11 +16,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          
-      # - name: Install dependencies
-      #   run: yarn install --frozen-lockfile
-      #   env:
-      #     DETECT_CHROMEDRIVER_VERSION: true
           
       - name: Create Changelog
         run: |
@@ -54,17 +45,14 @@ jobs:
           npm version $RELEASE_VERSION
           git tag -a $RELEASE_VERSION -m "$RELEASE_VERSION"
           
-      
+      #|
+          # npm i --save-dev @vscode/vsce
+          
       - name: Package Extension (Stable)
-        run: |
-          npm i --save-dev @vscode/vsce
-          npx vsce package -o "./marquee-$RELEASE_VERSION.vsix"
+        run: npx vsce package -o "./marquee-$RELEASE_VERSION.vsix"
         
         
       - name: Push Tags
-      #   run: |
-      #     git log -1 --stat
-      #     git push origin main --tags
         run: |
           export GIT_TAG=$RELEASE_VERSION
           echo "GIT_TAG=$GIT_TAG" >> $GITHUB_ENV
