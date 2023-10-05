@@ -47,9 +47,9 @@ jobs:
         
           # npm version $RELEASE_VERSION
           # git tag -a $RELEASE_VERSION -m "$RELEASE_VERSION"
+          # npm version ${{ steps.package-version.outputs.current-version}}
       - name: Version Package
         run: |
-          npm version ${{ steps.package-version.outputs.current-version}}
           git tag -a ${{ steps.package-version.outputs.current-version}} -m "${{ steps.package-version.outputs.current-version}}"
           
       - name: Restore Cache
