@@ -18,13 +18,12 @@ type HTMLElement = {
 
 let attributes = {
 	class: "classList",
+	rowspan: "rowSpan",
 };
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log('"html-to-js" active');
-	function createElement() {
-
-	}
+	
 	let insertFunction = vscode.commands.registerTextEditorCommand('html-to-js.insertFunction', (editor, edit) => {
 		editor.selections.forEach((selection, i) => {
 			let text = "function createElement(tag = \"span\", data = {}) {\n" +
