@@ -11,6 +11,10 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
           
       - name: Setup Node version
         uses: actions/setup-node@v3
@@ -64,7 +68,8 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
 
       - name: Package Extension
-        run: npx @vscode/vsce package -o "./marquee-$RELEASE_VERSION.vsix"
+        # run: npx @vscode/vsce package -o "./marquee-$RELEASE_VERSION.vsix"
+        run: npx @vscode/vsce package -o "./marquee-${{ steps.package-version.outputs.current-version}}.vsix"
         
       - name: Push Tags
         run: |
@@ -76,5 +81,6 @@ jobs:
         with:
           artifacts: "./marquee-*"
           bodyFile: ${{ github.workspace }}-CHANGELOG.txt
-          tag: ${{ env.GIT_TAG }}
+          # tag: ${{ env.GIT_TAG }}
+          tag: ${{ steps.package-version.outputs.current-version}}
           prerelease: false
