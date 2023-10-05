@@ -54,7 +54,7 @@ jobs:
       - name: Generate Cache Hash
         run: |
           HASH=${{ hashFiles('package-lock.json') }}
-          echo "HASH=$HASH" >> $CACHE_HASH
+          echo "HASH=$HASH" >> $env.CACHE_HASH
 
       - name: Restore Cache
         uses: actions/cache/restore@v3
