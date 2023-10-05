@@ -50,16 +50,17 @@ jobs:
         uses: actions/cache/restore@v3
         id: restore-cache
         with:
+            path: /home/runner/work/html-to-js/html-to-js/node_modules
             key: cache-${{ hashFiles('**/lockfiles') }}
           
       - name: Install vsce
-        run: npm list -global @vscode/vsce || sudo npm i --save-dev -global @vscode/vsce
+        run: npm list @vscode/vsce || sudo npm i --save-dev @vscode/vsce
 
       - name: Cache node_modules
         uses: actions/cache/save@v3
         id: cache
         with:
-          path: /usr/lib/node_modules
+          path: /home/runner/work/html-to-js/html-to-js/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
 
       - name: Package Extension
