@@ -49,6 +49,7 @@ jobs:
         uses: actions/cache/restore@v3
         id: restore-cache
         with:
+            path: /usr/lib/node_modules
             key: cache-${{ hashFiles('**/lockfiles') }}
           
       - name: Install vsce
@@ -58,7 +59,7 @@ jobs:
         uses: actions/cache/save@v3
         id: cache
         with:
-          path: /usr/lib/node_modules
+          path: /usr/bin/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
 
       - name: Package Extension
@@ -66,6 +67,7 @@ jobs:
         
       - name: Push Tags
         run: |
+          echo ${{ env.node_modules.path }}
           export GIT_TAG=$RELEASE_VERSION
           echo "GIT_TAG=$GIT_TAG" >> $GITHUB_ENV
           
