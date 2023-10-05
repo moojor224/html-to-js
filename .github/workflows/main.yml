@@ -8,6 +8,8 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      CACHE_HASH: null
     steps:
 
       - name: Clone Repository
@@ -59,7 +61,7 @@ jobs:
         id: restore-cache
         with:
             path: /home/runner/work/html-to-js/html-to-js/node_modules
-            key: ${{ runner.os }}-$CACHE_HASH
+            key: ${{ runner.os }}-${{env.CACHE_HASH}}
           
       - name: Install vsce
         run: npm list @vscode/vsce || sudo npm i --save-dev @vscode/vsce
