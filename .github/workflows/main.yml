@@ -45,10 +45,12 @@ jobs:
           echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
           echo "Bump to $RELEASE_VERSION"
         
+          # npm version $RELEASE_VERSION
+          # git tag -a $RELEASE_VERSION -m "$RELEASE_VERSION"
       - name: Version Package
         run: |
-          npm version $RELEASE_VERSION
-          git tag -a $RELEASE_VERSION -m "$RELEASE_VERSION"
+          npm version ${{ steps.package-version.outputs.current-version}}
+          git tag -a ${{ steps.package-version.outputs.current-version}} -m "${{ steps.package-version.outputs.current-version}}"
           
       - name: Restore Cache
         uses: actions/cache/restore@v3
@@ -71,9 +73,10 @@ jobs:
         # run: npx @vscode/vsce package -o "./marquee-$RELEASE_VERSION.vsix"
         run: npx @vscode/vsce package -o "./marquee-${{ steps.package-version.outputs.current-version}}.vsix"
         
+          # export GIT_TAG=$RELEASE_VERSION
       - name: Push Tags
         run: |
-          export GIT_TAG=$RELEASE_VERSION
+          export GIT_TAG=${{ steps.package-version.outputs.current-version}}
           echo "GIT_TAG=$GIT_TAG" >> $GITHUB_ENV
           
       - name: GitHub Release
