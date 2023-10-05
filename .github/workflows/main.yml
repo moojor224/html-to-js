@@ -2,7 +2,9 @@ name: Package Release
 
 on:
   workflow_dispatch:
-  
+
+
+    
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -46,12 +48,15 @@ jobs:
         run: |
           git tag -a ${{ steps.package-version.outputs.current-version}} -m "${{ steps.package-version.outputs.current-version}}"
           
+      - name: Generate Cache Hash
+        run: CACHE_HASH=${{ hashFiles('package-lock.json') }}
+
       - name: Restore Cache
         uses: actions/cache/restore@v3
         id: restore-cache
         with:
             path: /home/runner/work/html-to-js/html-to-js/node_modules
-            key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+            key: ${{ runner.os }}-$CACHE_HASH
           
       - name: Install vsce
         run: npm list @vscode/vsce || sudo npm i --save-dev @vscode/vsce
@@ -61,7 +66,7 @@ jobs:
         id: cache
         with:
           path: /home/runner/work/html-to-js/html-to-js/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-$CACHE_HASH
 
       - name: Package Extension
         run: npx @vscode/vsce package -o "./marquee-${{ steps.package-version.outputs.current-version}}.vsix"
