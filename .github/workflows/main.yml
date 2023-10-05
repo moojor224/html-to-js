@@ -62,7 +62,7 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
 
       - name: Package Extension
-        run: npx vsce package -o "./marquee-$RELEASE_VERSION.vsix"
+        run: npx @vscode/vsce package -o "./marquee-$RELEASE_VERSION.vsix"
         
       - name: Push Tags
         run: |
