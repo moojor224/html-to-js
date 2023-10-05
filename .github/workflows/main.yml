@@ -57,7 +57,7 @@ jobs:
         id: restore-cache
         with:
             path: /home/runner/work/html-to-js/html-to-js/node_modules
-            key: cache-${{ hashFiles('**/lockfiles') }}
+            key: cache-${{ hashFiles(package-lock.json) }}
           
       - name: Install vsce
         run: npm list @vscode/vsce || sudo npm i --save-dev @vscode/vsce
@@ -67,7 +67,7 @@ jobs:
         id: cache
         with:
           path: /home/runner/work/html-to-js/html-to-js/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+          key: ${{ runner.os }}-${{ hashFiles(package-lock.json) }}
 
       - name: Package Extension
         # run: npx @vscode/vsce package -o "./marquee-$RELEASE_VERSION.vsix"
