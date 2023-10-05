@@ -66,6 +66,7 @@ jobs:
         
       - name: Push Tags
         run: |
+          echo `pwd`
           export GIT_TAG=$RELEASE_VERSION
           echo "GIT_TAG=$GIT_TAG" >> $GITHUB_ENV
           
