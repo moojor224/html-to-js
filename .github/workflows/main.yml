@@ -45,13 +45,24 @@ jobs:
           npm version $RELEASE_VERSION
           git tag -a $RELEASE_VERSION -m "$RELEASE_VERSION"
           
-      #
+      - name: Restore Cache
+        uses: actions/cache/restore@v3
+        id: restore-cache
+        with:
+            key: cache-${{ hashFiles('**/lockfiles') }}
           
-      - name: Package Extension (Stable)
-        run: |
-          npm i --save-dev @vscode/vsce
-          npx vsce package -o "./marquee-$RELEASE_VERSION.vsix"
-        
+      - name: Install vsce
+        run: npm list -global @vscode/vsce || sudo npm i --save-dev -global @vscode/vsce
+
+      - name: Cache node_modules
+        uses: actions/cache/save@v3
+        id: cache
+        with:
+          path: /usr/lib/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+
+      - name: Package Extension
+        run: npx vsce package -o "./marquee-$RELEASE_VERSION.vsix"
         
       - name: Push Tags
         run: |
