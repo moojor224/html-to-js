@@ -74,7 +74,7 @@ jobs:
       - name: GitHub Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "./marquee-*,./${{ github.workspace }}-CHANGELOG.txt"
+          artifacts: "./marquee-*,${{ github.workspace }}-CHANGELOG.txt"
           bodyFile: ${{ github.workspace }}-CHANGELOG.txt
           tag: ${{ steps.package-version.outputs.current-version}}
           prerelease: false
