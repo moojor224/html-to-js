@@ -16,6 +16,10 @@ type HTMLElement = {
 	children: HTMLElement[];
 };
 
+let attributes = {
+	class: "classList",
+};
+
 export function activate(context: vscode.ExtensionContext) {
 	console.log('"html-to-js" active');
 	function createElement() {
@@ -33,7 +37,13 @@ export function activate(context: vscode.ExtensionContext) {
 				"\t\t}\n" +
 				"\t});\n" +
 				"\treturn tag;\n" +
-				"}";
+				"}\n" +
+				"window.Element.prototype.add = function(...args) {\n" +
+				"\targs.forEach(elem => {\n" +
+				"\t\tthis.append(elem);\n" +
+				"\t});\n" +
+				"\treturn this;\n" +
+				"}\n";
 			edit.insert(selection.active, text);  // insert at current cursor
 		});
 	});
