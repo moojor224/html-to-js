@@ -47,7 +47,7 @@ jobs:
 
       - name: Generate Cache Hash
         id: generate-hash
-        run: echo "CACHE_HASH=${{ hashFiles('package-lock.json') }}" >> $GITHUB_OUTPUT
+        run: echo "CACHE_HASH=${{ hashFiles('package-lock.json') }}" >> "$GITHUB_OUTPUT"
     
       - name: Version Package
         run: |
