@@ -53,15 +53,15 @@ jobs:
 
       - name: Generate Cache Hash
         run: |
-          HASH=${{ hashFiles('package-lock.json') }}
-          echo "HASH=$HASH" >> $env.CACHE_HASH
+          CACHE_HASH=${{ hashFiles('package-lock.json') }}
+          echo "CACHE_HASH=$CACHE_HASH" >> $GITHUB_ENV
 
       - name: Restore Cache
         uses: actions/cache/restore@v3
         id: restore-cache
         with:
             path: /home/runner/work/html-to-js/html-to-js/node_modules
-            key: ${{ runner.os }}-${{env.CACHE_HASH}}
+            key: ${{ runner.os }}-$CACHE_HASH
           
       - name: Install vsce
         run: npm list @vscode/vsce || sudo npm i --save-dev @vscode/vsce
