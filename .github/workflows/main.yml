@@ -9,6 +9,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+
       - name: Clone Repository
         uses: actions/checkout@v3
         with:
@@ -47,9 +48,11 @@ jobs:
       - name: Version Package
         run: |
           git tag -a ${{ steps.package-version.outputs.current-version}} -m "${{ steps.package-version.outputs.current-version}}"
-          
+
       - name: Generate Cache Hash
-        run: CACHE_HASH=${{ hashFiles('package-lock.json') }}
+        run: |
+          HASH=${{ hashFiles('package-lock.json') }}
+          echo "HASH=$HASH" >> $CACHE_HASH
 
       - name: Restore Cache
         uses: actions/cache/restore@v3
