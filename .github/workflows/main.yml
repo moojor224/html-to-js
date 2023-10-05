@@ -45,11 +45,12 @@ jobs:
           npm version $RELEASE_VERSION
           git tag -a $RELEASE_VERSION -m "$RELEASE_VERSION"
           
-      #|
-          # npm i --save-dev @vscode/vsce
+      #
           
       - name: Package Extension (Stable)
-        run: npx vsce package -o "./marquee-$RELEASE_VERSION.vsix"
+        run: |
+          npm i --save-dev @vscode/vsce
+          npx vsce package -o "./marquee-$RELEASE_VERSION.vsix"
         
         
       - name: Push Tags
