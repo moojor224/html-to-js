@@ -56,11 +56,9 @@ jobs:
       - name: Restore Cache
         uses: actions/cache/restore@v3
         id: restore-cache
-        env:
-          HASH: ${{ steps.generate-hash.outputs.HASH }}
         with:
             path: /home/runner/work/html-to-js/html-to-js/node_modules
-            key: ${{ runner.os }}-$HASH
+            key: ${{ runner.os }}-${{ steps.generate-hash.outputs.HASH }}
           
       - name: Install vsce
         run: npm list @vscode/vsce || sudo npm i --save-dev @vscode/vsce
@@ -68,14 +66,14 @@ jobs:
       - name: Cache node_modules
         uses: actions/cache/save@v3
         id: save-cache
-        env:
-          HASH: ${{ steps.generate-hash.outputs.HASH }}
         with:
           path: /home/runner/work/html-to-js/html-to-js/node_modules
-          key: ${{ runner.os }}-$HASH
+          key: ${{ runner.os }}-${{ steps.generate-hash.outputs.HASH }}
 
       - name: Package Extension
-        run: npx @vscode/vsce package -o "./marquee-${{ steps.package-version.outputs.current-version}}.vsix"
+        run: |
+          echo ${{ runner.os }}-${{ steps.generate-hash.outputs.HASH }}
+          npx @vscode/vsce package -o "./marquee-${{ steps.package-version.outputs.current-version}}.vsix"
         
       - name: Push Tags
         run: |
