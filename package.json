@@ -31,8 +31,20 @@
         "path": "./src/snippets.json"
       }
     ],
+    "submenus": [
+      {
+        "id": "HtmlJs.submenu",
+        "label": "HTML to JS"
+      }
+    ],
     "menus": {
       "editor/context": [
+        {
+          "submenu": "HtmlJs.submenu",
+          "group": "html-to-js"
+        }
+      ],
+      "HtmlJs.submenu": [
         {
           "when": "resourceLangId == html",
           "command": "html-to-js.convert",

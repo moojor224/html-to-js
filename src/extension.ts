@@ -23,7 +23,7 @@ let attributes = {
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log('"html-to-js" active');
-	
+
 	let insertFunction = vscode.commands.registerTextEditorCommand('html-to-js.insertFunction', (editor, edit) => {
 		editor.selections.forEach((selection, i) => {
 			let text = "function createElement(tag = \"span\", data = {}) {\n" +
@@ -46,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
 			edit.insert(selection.active, text);  // insert at current cursor
 		});
 	});
-
+	
 	let convert = vscode.commands.registerTextEditorCommand('html-to-js.convert', (editor, edit) => {
 		// vscode.window.showInformationMessage('Hello World from HTML to Javascript (createElement)!');
 		let sel = vscode.window.activeTextEditor?.selection;
@@ -101,12 +101,7 @@ export function activate(context: vscode.ExtensionContext) {
 		function makeTree(element: HTMLElement) {
 			var arr = [`\tcreateElement("div")`];
 			recurse(element, arr, 1).join("\n");
-			arr[arr.length - 1] = ((w) => {
-				if (w[w.length - 1] === ",") {
-					w.pop();
-				}
-				return w.join("");
-			})(arr[arr.length - 1].split(""));
+			arr[arr.length - 1] = arr[arr.length - 1].replace(/,$/g, "");
 			for (var i = 0; i < arr.length; i++) {
 				if (arr[i].trim().charAt(0) === ".") {
 					arr[i - 1] = arr[i - 1] + arr[i].trim();
