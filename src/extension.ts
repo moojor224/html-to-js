@@ -1,7 +1,8 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-const { JSDOM } = require("jsdom");
+import { DOMParser, parseHTML } from 'linkedom';
+import { NodeStruct } from 'linkedom/types/mixin/parent-node';
 
 type Kvp = {
 	name: string;
@@ -22,7 +23,6 @@ let attributes = {
 };
 
 export function activate(context: vscode.ExtensionContext) {
-	console.log('"html-to-js" active');
 
 	let insertFunction = vscode.commands.registerTextEditorCommand('html-to-js.insertFunction', (editor, edit) => {
 		editor.selections.forEach((selection, i) => {
@@ -46,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
 			edit.insert(selection.active, text);  // insert at current cursor
 		});
 	});
-	
+
 	let convert = vscode.commands.registerTextEditorCommand('html-to-js.convert', (editor, edit) => {
 		// vscode.window.showInformationMessage('Hello World from HTML to Javascript (createElement)!');
 		let sel = vscode.window.activeTextEditor?.selection;
@@ -56,11 +56,15 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 		let selText = editor.document.getText(new vscode.Range(sel.start, sel.end));
 
-		const dom = new JSDOM(`<!DOCTYPE html><body>${selText}</body>`);
+		const document = (new DOMParser).parseFromString(`<!DOCTYPE html><body>${selText}</body>`, 'text/html');
+
+		// const dom = new JSDOM(`<!DOCTYPE html><body>${selText}</body>`);
 
 		function setAttribute(data: any, name: string, value: string) {
 			let keys = {
 				class: "classList",
+				rowspan: "rowSpan",
+				colspan: "colSpan",
 			};
 			// @ts-ignore
 			name = keys[name] || name;
@@ -69,14 +73,12 @@ export function activate(context: vscode.ExtensionContext) {
 		function recurse(element: HTMLElement, arr: string[], tabs: number) {
 			if (element.children.length < 1) {
 				// arr.push(new Array(tabs).fill("\t").join("") + "),");
-				console.log("returning", arr);
 				return arr;
 			}
 			arr.push(new Array(tabs).fill("\t").join("") + ".add(");
 			[...element.children].forEach((e: HTMLElement) => {
 				var data = {};
 				[...e.attributes].forEach((a: Kvp) => {
-					// @ts-ignore
 					setAttribute(data, a.name, a.value);
 				});
 
@@ -85,20 +87,20 @@ export function activate(context: vscode.ExtensionContext) {
 					data.innerHTML = e.textContent;
 				}
 				arr.push(new Array(tabs + 1).fill("\t").join("") + `createElement("${e.tagName.toLowerCase()}"${(() => {
-					var d = JSON.stringify(data);
+					var d = JSON.stringify(data).replaceAll(/data\.[a-zA-Z$_]([a-zA-Z0-9]+)?/g, function (s: string): string {
+						return `"+${s}+"`;
+					}).replaceAll("+\"\"", "").replaceAll("\"\"+", "");
 					return d.length > 2 ? ", " + d : "";
 				})()})`);
-				// @ts-ignore
-				if (["(", ")", ","].includes(arr[arr.length - 2].split("").pop())) {
+				if (["(", ")", ","].includes(`${arr[arr.length - 2].split("").pop()}`)) {
 					arr[arr.length - 1] += ",";
 				}
 				recurse(e, arr, tabs + 1);
 			});
 			arr.push(new Array(tabs).fill("\t").join("") + "),");
-			console.log("arr", arr);
 			return arr;
 		}
-		function makeTree(element: HTMLElement) {
+		function makeTree(element: NodeStruct) {
 			var arr = [`\tcreateElement("div")`];
 			recurse(element, arr, 1).join("\n");
 			arr[arr.length - 1] = arr[arr.length - 1].replace(/,$/g, "");
@@ -112,7 +114,8 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 			return arr.join("\n") + ";";
 		}
-		let output = makeTree(dom.window.document.querySelector("body"));
+		let output = makeTree(document.querySelector("body"));
+		output = output;
 		edit.insert(sel.end, "\n\n<script>\n" + (output) + "\n</script>\n\n");
 	});
 
