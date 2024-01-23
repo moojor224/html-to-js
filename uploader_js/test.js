@@ -1,1 +1,0 @@
-import("linkedom").then(e=>console.log(e));
