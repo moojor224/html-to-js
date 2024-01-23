@@ -1,91 +1,55 @@
 {
-  "name": "html-to-js",
-  "displayName": "HTML to Javascript (createElement)",
-  "description": "Converts the selected HTML to a javascript snippet that can be run to generate the HTML",
-  "version": "0.0.11",
-  "repository": {
-    "url": "https://github.com/moojor224/html-to-js/"
-  },
-  "engines": {
-    "vscode": "^1.82.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [],
-  "main": "./out/main.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "html-to-js.convert",
-        "title": "Convert HTML to JS"
-      },
-      {
-        "command": "html-to-js.insertFunction",
-        "title": "Insert CreateElement function definition"
-      }
+    "name": "vscode-micropython-uploader",
+    "displayName": "VSCode Micropython Uploader",
+    "description": "Upload python files to a connected micropython device",
+    "version": "0.0.1",
+    "repository": {
+        "url": "https://github.com/moojor224/vscode-micropython-uploader/"
+    },
+    "engines": {
+        "vscode": "^1.82.0"
+    },
+    "categories": [
+        "Other"
     ],
-    "snippets": [
-      {
-        "language": "javascript",
-        "path": "./src/snippets.json"
-      }
-    ],
-    "submenus": [
-      {
-        "id": "HtmlJs.submenu",
-        "label": "HTML to JS"
-      }
-    ],
-    "menus": {
-      "editor/context": [
-        {
-          "submenu": "HtmlJs.submenu",
-          "group": "html-to-js"
-        }
-      ],
-      "HtmlJs.submenu": [
-        {
-          "when": "resourceLangId == html",
-          "command": "html-to-js.convert",
-          "alt": "html-to-js.convert",
-          "group": "HtmlJs@1"
-        },
-        {
-          "when": "resourceLangId == html || resourceLangId == javascript",
-          "command": "html-to-js.insertFunction",
-          "alt": "html-to-js.insertFunction",
-          "group": "HtmlJs@1"
-        }
-      ]
+    "activationEvents": [],
+    "main": "./dist/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "vscode-micropython-uploader.helloWorld",
+                "title": "Hello World"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run package",
+        "webpack": "webpack --mode development",
+        "webpack-dev": "webpack --mode development --watch",
+        "package": "webpack --mode production --devtool hidden-source-map",
+        "test-compile": "tsc -p ./"
+    },
+    "devDependencies": {
+        "@types/mocha": "^10.0.2",
+        "@types/node": "18.x",
+        "@types/vscode": "^1.82.0",
+        "@typescript-eslint/eslint-plugin": "^6.7.3",
+        "@typescript-eslint/parser": "^6.7.3",
+        "@vscode/test-electron": "^2.3.4",
+        "@vscode/vsce": "^2.22.0",
+        "esbuild": "^0.19.4",
+        "eslint": "^8.50.0",
+        "glob": "^10.3.3",
+        "mocha": "^10.2.0",
+        "typescript": "^5.2.2",
+        "webpack-cli": "^5.1.4"
+    },
+    "dependencies": {
+        "@microsoft/vscode-serial-monitor-api": "^0.1.7",
+        "linkedom": "^0.15.4",
+        "path": "^0.12.7",
+        "perf_hooks": "^0.0.1",
+        "ts-loader": "^9.5.1",
+        "webpack": "^5.89.0"
     }
-  },
-  "scripts": {
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js",
-    "vscode:prepublish": "npm run esbuild-base -- --minify",
-    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
-    "esbuild": "npm run esbuild-base -- --minify",
-    "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
-    "test-compile": "tsc -p ./"
-  },
-  "devDependencies": {
-    "@types/mocha": "^10.0.2",
-    "@types/node": "18.x",
-    "@types/vscode": "^1.82.0",
-    "@typescript-eslint/eslint-plugin": "^6.7.3",
-    "@typescript-eslint/parser": "^6.7.3",
-    "@vscode/test-electron": "^2.3.4",
-    "esbuild": "^0.19.4",
-    "eslint": "^8.50.0",
-    "glob": "^10.3.3",
-    "mocha": "^10.2.0",
-    "typescript": "^5.2.2"
-  },
-  "dependencies": {
-    "linkedom": "^0.15.4"
-  }
 }
